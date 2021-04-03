@@ -8,7 +8,8 @@
         "hot": "mix watch --hot",
         "prod": "npm run production",
         "production": "mix --production",
-        "prettier": "prettier"
+        "prettier": "prettier",
+        "eslint" : "eslint --fix-dry-run -c .eslintrc.js --ext .js,.vue resources/js"
     },
     "devDependencies": {
         "@inertiajs/inertia": "^0.8.4",
