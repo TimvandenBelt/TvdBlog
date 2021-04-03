@@ -10,7 +10,8 @@
         "production": "mix --production",
         "prettier": "prettier",
         "eslint": "eslint --fix-dry-run -c .eslintrc.js --ext .js,.vue resources/js",
-        "stylelint": "stylelint --config .stylelintrc.json resources"
+        "stylelint": "stylelint --config .stylelintrc.json resources",
+        "phpstan": "vendor/bin/phpstan analyse -l 5 app routes"
     },
     "devDependencies": {
         "@inertiajs/inertia": "^0.8.4",
