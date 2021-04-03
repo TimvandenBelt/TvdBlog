@@ -1,0 +1,9 @@
+#Ignore artifacts
+bootstrap
+database
+config
+public
+storage
+
+vendor
+node_modules
