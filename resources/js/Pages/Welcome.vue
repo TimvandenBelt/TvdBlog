@@ -1,6 +1,6 @@
 <template>
     <div
-        class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0"
+        class="relative flex items-top justify-center min-h-screen bg-gray-100 dark-bg-gray-900 sm:items-center sm:pt-0"
     >
         <div
             v-if="canLogin"
@@ -49,7 +49,7 @@
             </div>
 
             <div
-                class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg"
+                class="mt-8 bg-white dark-bg-gray-800 overflow-hidden shadow sm:rounded-lg"
             >
                 <div class="grid grid-cols-1 md:grid-cols-2">
                     <div class="p-6">
@@ -70,7 +70,7 @@
                             <div class="ml-4 text-lg leading-7 font-semibold">
                                 <a
                                     href="https://laravel.com/docs"
-                                    class="underline text-gray-900 dark:text-white"
+                                    class="underline text-gray-900 dark-text-white"
                                     >Documentation</a
                                 >
                             </div>
@@ -78,7 +78,7 @@
 
                         <div class="ml-12">
                             <div
-                                class="mt-2 text-gray-600 dark:text-gray-400 text-sm"
+                                class="mt-2 text-gray-600 dark-text-gray-400 text-sm"
                             >
                                 Laravel has wonderful, thorough documentation
                                 covering every aspect of the framework. Whether
@@ -90,7 +90,7 @@
                     </div>
 
                     <div
-                        class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-t-0 md:border-l"
+                        class="p-6 border-t border-gray-200 dark-border-gray-700 md:border-t-0 md:border-l"
                     >
                         <div class="flex items-center">
                             <svg
@@ -112,7 +112,7 @@
                             <div class="ml-4 text-lg leading-7 font-semibold">
                                 <a
                                     href="https://laracasts.com"
-                                    class="underline text-gray-900 dark:text-white"
+                                    class="underline text-gray-900 dark-text-white"
                                     >Laracasts</a
                                 >
                             </div>
@@ -120,7 +120,7 @@
 
                         <div class="ml-12">
                             <div
-                                class="mt-2 text-gray-600 dark:text-gray-400 text-sm"
+                                class="mt-2 text-gray-600 dark-text-gray-400 text-sm"
                             >
                                 Laracasts offers thousands of video tutorials on
                                 Laravel, PHP, and JavaScript development. Check
@@ -131,7 +131,7 @@
                     </div>
 
                     <div
-                        class="p-6 border-t border-gray-200 dark:border-gray-700"
+                        class="p-6 border-t border-gray-200 dark-border-gray-700"
                     >
                         <div class="flex items-center">
                             <svg
@@ -150,7 +150,7 @@
                             <div class="ml-4 text-lg leading-7 font-semibold">
                                 <a
                                     href="https://laravel-news.com/"
-                                    class="underline text-gray-900 dark:text-white"
+                                    class="underline text-gray-900 dark-text-white"
                                     >Laravel News</a
                                 >
                             </div>
@@ -158,7 +158,7 @@
 
                         <div class="ml-12">
                             <div
-                                class="mt-2 text-gray-600 dark:text-gray-400 text-sm"
+                                class="mt-2 text-gray-600 dark-text-gray-400 text-sm"
                             >
                                 Laravel News is a community driven portal and
                                 newsletter aggregating all of the latest and
@@ -169,7 +169,7 @@
                     </div>
 
                     <div
-                        class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-l"
+                        class="p-6 border-t border-gray-200 dark-border-gray-700 md:border-l"
                     >
                         <div class="flex items-center">
                             <svg
@@ -186,7 +186,7 @@
                                 ></path>
                             </svg>
                             <div
-                                class="ml-4 text-lg leading-7 font-semibold text-gray-900 dark:text-white"
+                                class="ml-4 text-lg leading-7 font-semibold text-gray-900 dark-text-white"
                             >
                                 Vibrant Ecosystem
                             </div>
@@ -194,7 +194,7 @@
 
                         <div class="ml-12">
                             <div
-                                class="mt-2 text-gray-600 dark:text-gray-400 text-sm"
+                                class="mt-2 text-gray-600 dark-text-gray-400 text-sm"
                             >
                                 Laravel's robust library of first-party tools
                                 and libraries, such as
@@ -351,27 +351,27 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    .dark\:bg-gray-800 {
+    .dark-bg-gray-800 {
         background-color: #2d3748;
         background-color: rgba(45, 55, 72, var(--tw-bg-opacity));
     }
 
-    .dark\:bg-gray-900 {
+    .dark-bg-gray-900 {
         background-color: #1a202c;
         background-color: rgba(26, 32, 44, var(--tw-bg-opacity));
     }
 
-    .dark\:border-gray-700 {
+    .dark-border-gray-700 {
         border-color: #4a5568;
         border-color: rgba(74, 85, 104, var(--tw-border-opacity));
     }
 
-    .dark\:text-white {
+    .dark-text-white {
         color: #fff;
         color: rgba(255, 255, 255, var(--tw-text-opacity));
     }
 
-    .dark\:text-gray-400 {
+    .dark-text-gray-400 {
         color: #cbd5e0;
         color: rgba(203, 213, 224, var(--tw-text-opacity));
     }
