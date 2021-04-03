@@ -1,10 +1,10 @@
 <template>
     <div>
-        <button :class="classes" class="w-full text-left" v-if="as == 'button'">
+        <button v-if="as == 'button'" :class="classes" class="w-full text-left">
             <slot></slot>
         </button>
 
-        <inertia-link :href="href" :class="classes" v-else>
+        <inertia-link v-else :href="href" :class="classes">
             <slot></slot>
         </inertia-link>
     </div>

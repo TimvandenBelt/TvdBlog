@@ -47,7 +47,6 @@
 import Modal from "./Modal";
 
 export default {
-    emits: ["close"],
 
     components: {
         Modal,
@@ -64,6 +63,7 @@ export default {
             default: true,
         },
     },
+    emits: ["close"],
 
     methods: {
         close() {

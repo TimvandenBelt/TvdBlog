@@ -23,11 +23,11 @@ import ApiTokenManager from "./ApiTokenManager";
 import AppLayout from "@/Layouts/AppLayout";
 
 export default {
-    props: ["tokens", "availablePermissions", "defaultPermissions"],
 
     components: {
         ApiTokenManager,
         AppLayout,
     },
+    props: ["tokens", "availablePermissions", "defaultPermissions"],
 };
 </script>

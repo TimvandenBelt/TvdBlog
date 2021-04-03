@@ -14,11 +14,11 @@
 
                 <div class="mt-4">
                     <jet-input
+                        ref="password"
+                        v-model="form.password"
                         type="password"
                         class="mt-1 block w-3/4"
                         placeholder="Password"
-                        ref="password"
-                        v-model="form.password"
                         @keyup.enter="confirmPassword"
                     />
 
@@ -33,9 +33,9 @@
 
                 <jet-button
                     class="ml-2"
-                    @click="confirmPassword"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
+                    @click="confirmPassword"
                 >
                     {{ button }}
                 </jet-button>
@@ -50,9 +50,17 @@ import JetDialogModal from "./DialogModal";
 import JetInput from "./Input";
 import JetInputError from "./InputError";
 import JetSecondaryButton from "./SecondaryButton";
+import axios from 'axios';
 
 export default {
-    emits: ["confirmed"],
+
+    components: {
+        JetButton,
+        JetDialogModal,
+        JetInput,
+        JetInputError,
+        JetSecondaryButton,
+    },
 
     props: {
         title: {
@@ -66,14 +74,7 @@ export default {
             default: "Confirm",
         },
     },
-
-    components: {
-        JetButton,
-        JetDialogModal,
-        JetInput,
-        JetInputError,
-        JetSecondaryButton,
-    },
+    emits: ["confirmed"],
 
     data() {
         return {

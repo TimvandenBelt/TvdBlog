@@ -11,10 +11,10 @@
                 <jet-label for="current_password" value="Current Password" />
                 <jet-input
                     id="current_password"
+                    ref="current_password"
+                    v-model="form.current_password"
                     type="password"
                     class="mt-1 block w-full"
-                    v-model="form.current_password"
-                    ref="current_password"
                     autocomplete="current-password"
                 />
                 <jet-input-error
@@ -27,10 +27,10 @@
                 <jet-label for="password" value="New Password" />
                 <jet-input
                     id="password"
+                    ref="password"
+                    v-model="form.password"
                     type="password"
                     class="mt-1 block w-full"
-                    v-model="form.password"
-                    ref="password"
                     autocomplete="new-password"
                 />
                 <jet-input-error :message="form.errors.password" class="mt-2" />
@@ -43,9 +43,9 @@
                 />
                 <jet-input
                     id="password_confirmation"
+                    v-model="form.password_confirmation"
                     type="password"
                     class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
                     autocomplete="new-password"
                 />
                 <jet-input-error

@@ -7,8 +7,8 @@
                 </div>
 
                 <div
-                    v-html="terms"
                     class="w-full sm:max-w-2xl mt-6 p-6 bg-white shadow-md overflow-hidden sm:rounded-lg prose"
+                    v-html="terms"
                 ></div>
             </div>
         </div>
@@ -19,10 +19,10 @@
 import JetAuthenticationCardLogo from "@/Jetstream/AuthenticationCardLogo";
 
 export default {
-    props: ["terms"],
 
     components: {
         JetAuthenticationCardLogo,
     },
+    props: ["terms"],
 };
 </script>

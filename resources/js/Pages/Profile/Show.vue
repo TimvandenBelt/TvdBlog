@@ -57,7 +57,6 @@ import UpdatePasswordForm from "./UpdatePasswordForm";
 import UpdateProfileInformationForm from "./UpdateProfileInformationForm";
 
 export default {
-    props: ["sessions"],
 
     components: {
         AppLayout,
@@ -68,5 +67,6 @@ export default {
         UpdatePasswordForm,
         UpdateProfileInformationForm,
     },
+    props: ["sessions"],
 };
 </script>

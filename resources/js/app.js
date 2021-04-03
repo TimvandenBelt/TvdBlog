@@ -1,4 +1,4 @@
-require("./bootstrap");
+import "./bootstrap";
 
 // Import modules...
 import { createApp, h } from "vue";
@@ -14,7 +14,8 @@ createApp({
     render: () =>
         h(InertiaApp, {
             initialPage: JSON.parse(el.dataset.page),
-            resolveComponent: (name) => require(`./Pages/${name}`).default,
+            resolveComponent: (name) =>
+                import(`./Pages/${name}`).then((module) => module.default),
         }),
 })
     .mixin({ methods: { route } })

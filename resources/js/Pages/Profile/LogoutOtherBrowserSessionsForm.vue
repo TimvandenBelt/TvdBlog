@@ -17,14 +17,15 @@
             </div>
 
             <!-- Other Browser Sessions -->
-            <div class="mt-5 space-y-6" v-if="sessions.length > 0">
+            <div v-if="sessions.length > 0" class="mt-5 space-y-6">
                 <div
-                    class="flex items-center"
                     v-for="(session, i) in sessions"
                     :key="i"
+                    class="flex items-center"
                 >
                     <div>
                         <svg
+                            v-if="session.agent.is_desktop"
                             fill="none"
                             stroke-linecap="round"
                             stroke-linejoin="round"
@@ -32,7 +33,6 @@
                             viewBox="0 0 24 24"
                             stroke="currentColor"
                             class="w-8 h-8 text-gray-500"
-                            v-if="session.agent.is_desktop"
                         >
                             <path
                                 d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
@@ -40,6 +40,7 @@
                         </svg>
 
                         <svg
+                            v-else
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
                             stroke-width="2"
@@ -48,7 +49,6 @@
                             stroke-linecap="round"
                             stroke-linejoin="round"
                             class="w-8 h-8 text-gray-500"
-                            v-else
                         >
                             <path d="M0 0h24v24H0z" stroke="none"></path>
                             <rect
@@ -73,8 +73,8 @@
                                 {{ session.ip_address }},
 
                                 <span
-                                    class="text-green-500 font-semibold"
                                     v-if="session.is_current_device"
+                                    class="text-green-500 font-semibold"
                                     >This device</span
                                 >
                                 <span v-else
@@ -107,11 +107,11 @@
 
                     <div class="mt-4">
                         <jet-input
+                            ref="password"
+                            v-model="form.password"
                             type="password"
                             class="mt-1 block w-3/4"
                             placeholder="Password"
-                            ref="password"
-                            v-model="form.password"
                             @keyup.enter="logoutOtherBrowserSessions"
                         />
 
@@ -129,9 +129,9 @@
 
                     <jet-button
                         class="ml-2"
-                        @click="logoutOtherBrowserSessions"
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
+                        @click="logoutOtherBrowserSessions"
                     >
                         Log Out Other Browser Sessions
                     </jet-button>
@@ -151,7 +151,6 @@ import JetInputError from "@/Jetstream/InputError";
 import JetSecondaryButton from "@/Jetstream/SecondaryButton";
 
 export default {
-    props: ["sessions"],
 
     components: {
         JetActionMessage,
@@ -162,6 +161,7 @@ export default {
         JetInputError,
         JetSecondaryButton,
     },
+    props: ["sessions"],
 
     data() {
         return {
