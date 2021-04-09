@@ -16,3 +16,5 @@ yarn-error.log
 
 #Ignore IDE's
 /.idea
+.phpstorm.meta.php
+_ide_helper.php
