@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PageController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -29,3 +30,24 @@ Route::middleware(["auth:sanctum", "verified"])
         return Inertia::render("Dashboard");
     })
     ->name("dashboard");
+
+/**
+ * Admin section
+ */
+Route::middleware(["auth:sanctum"])
+    ->prefix("admin")
+    ->group(function () {
+        /**
+         * Pages section
+         */
+        Route::prefix("pages")->group(function () {
+            Route::post("/", [PageController::class, "store"])->name(
+                "pages.create",
+            );
+            Route::get("/", [PageController::class, "index"])->name(
+                "pages.index",
+            );
+        });
+    });
+
+Route::get("/{page:slug}", [PageController::class, "show"])->name("pages.show");
