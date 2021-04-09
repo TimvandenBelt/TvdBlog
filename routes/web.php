@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PageController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -15,15 +16,38 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+Route::get("/", function () {
+    return Inertia::render("Welcome", [
+        "canLogin" => Route::has("login"),
+        "canRegister" => Route::has("register"),
+        "laravelVersion" => Application::VERSION,
+        "phpVersion" => PHP_VERSION,
     ]);
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->name('dashboard');
+Route::middleware(["auth:sanctum", "verified"])
+    ->get("/dashboard", function () {
+        return Inertia::render("Dashboard");
+    })
+    ->name("dashboard");
+
+/**
+ * Admin section
+ */
+Route::middleware(["auth:sanctum"])
+    ->prefix("admin")
+    ->group(function () {
+        /**
+         * Pages section
+         */
+        Route::prefix("pages")->group(function () {
+            Route::post("/", [PageController::class, "store"])->name(
+                "pages.create",
+            );
+            Route::get("/", [PageController::class, "index"])->name(
+                "pages.index",
+            );
+        });
+    });
+
+Route::get("/{page:slug}", [PageController::class, "show"])->name("pages.show");

@@ -1,0 +1,11 @@
+{
+    "plugins": ["stylelint-high-performance-animation"],
+    "extends": [
+        "stylelint-config-standard",
+        "stylelint-config-sass-guidelines",
+        "stylelint-config-prettier"
+    ],
+    "rules": {
+        "plugin/no-low-performance-animation-properties": true
+    }
+}
