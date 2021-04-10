@@ -50,4 +50,7 @@ Route::middleware(["auth:sanctum"])
         });
     });
 
+/**
+ * Page wildcard, must be at bottom.
+ */
 Route::get("/{page:slug}", [PageController::class, "show"])->name("pages.show");
