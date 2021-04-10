@@ -68,7 +68,7 @@ class PageTest extends TestCase
         /** @var Page $page */
         $page = Page::factory()->create();
         $this->actingAs($user2);
-        $page->update(["title" => "Testing"]);
+        $page->update(Page::factory()->raw());
         $this->assertEquals(
             $page->updated_by,
             $user2->id,
