@@ -19,7 +19,7 @@ class ProfileInformationTest extends TestCase
 
         $this->actingAs($user = User::factory()->create());
 
-        $this->put("/user/profile-information", [
+        $this->put(route("user-profile-information.update"), [
             "name" => "Test Name",
             "email" => $user->email,
             "photo" => UploadedFile::fake()->image("profile-photo.jpg"),
@@ -32,7 +32,7 @@ class ProfileInformationTest extends TestCase
 
         Event::fake();
 
-        $this->put("/user/profile-information", [
+        $this->put(route("user-profile-information.update"), [
             "name" => $user->fresh()->name,
             "email" => "test@example.com",
         ]);
