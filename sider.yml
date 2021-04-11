@@ -4,4 +4,3 @@ linter:
     language: php
     target:
       - app
-      - tests
