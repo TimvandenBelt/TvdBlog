@@ -70,10 +70,10 @@ class PageTest extends TestCase
     }
 
     /**
-     * A page can have relations with a user
+     * A page can have relations with a user.
      * @return void
      */
-    public function test_created_by_returns_belongsTo_relation()
+    public function test_relations_with_user()
     {
         $this->actingAs(User::factory()->create()); // Need to have a user loged in due to created_by and updated_by functionality.
         /** @var Page $page */
