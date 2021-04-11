@@ -15,7 +15,7 @@ class UpdatePasswordTest extends TestCase
     {
         $this->actingAs($user = User::factory()->create());
 
-        $response = $this->put("/user/password", [
+        $this->put(route("user-password.update"), [
             "current_password" => "password",
             "password" => "new-password",
             "password_confirmation" => "new-password",
@@ -30,7 +30,7 @@ class UpdatePasswordTest extends TestCase
     {
         $this->actingAs($user = User::factory()->create());
 
-        $response = $this->put("/user/password", [
+        $response = $this->put(route("user-password.update"), [
             "current_password" => "wrong-password",
             "password" => "new-password",
             "password_confirmation" => "new-password",
@@ -45,7 +45,7 @@ class UpdatePasswordTest extends TestCase
     {
         $this->actingAs($user = User::factory()->create());
 
-        $response = $this->put("/user/password", [
+        $response = $this->put(route("user-password.update"), [
             "current_password" => "password",
             "password" => "new-password",
             "password_confirmation" => "wrong-password",
