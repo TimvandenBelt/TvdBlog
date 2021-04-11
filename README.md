@@ -11,7 +11,7 @@ A simple CMS build on Laravel
 
 [![CodeFactor](https://www.codefactor.io/repository/github/timvandenbelt/tvdblog/badge)](https://www.codefactor.io/repository/github/timvandenbelt/tvdblog) [![DeepScan grade](https://deepscan.io/api/teams/11076/projects/16511/branches/360683/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=11076&pid=16511&bid=360683) [![CodeScene Code Health](https://codescene.io/projects/14587/status-badges/code-health)](https://codescene.io/projects/14587) [![CodeScene System Mastery](https://codescene.io/projects/14587/status-badges/system-mastery)](https://codescene.io/projects/14587)
 ### Builds:
-[![Laravel](https://github.com/TimvandenBelt/TvdBlog/actions/workflows/laravel.yml/badge.svg)](https://github.com/TimvandenBelt/TvdBlog/actions/workflows/laravel.yml) [![SonarCloud](https://github.com/TimvandenBelt/TvdBlog/actions/workflows/sonarcloud.yml/badge.svg)](https://github.com/TimvandenBelt/TvdBlog/actions/workflows/sonarcloud.yml)
+[![Laravel](https://github.com/TimvandenBelt/TvdBlog/actions/workflows/laravel.yml/badge.svg)](https://github.com/TimvandenBelt/TvdBlog/actions/workflows/laravel.yml)
 
 ## Uses:
 - Laravel
