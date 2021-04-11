@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use App\Models\Page;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -22,7 +21,7 @@ class UserTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $pages = Page::factory()
+        Page::factory()
             ->count(3)
             ->for($user, "created_by")
             ->for($user, "updated_by")
