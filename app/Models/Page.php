@@ -60,21 +60,21 @@ class Page extends Model
 
     private function autoset_updated_by()
     {
-        $this->updated_by = auth()->id();
+        $this->created_by_id = auth()->id();
     }
 
     private function autoset_created_by()
     {
-        $this->created_by = auth()->id();
+        $this->created_by_id = auth()->id();
     }
 
-    public function created_by()
+    public function created_by(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, "created_by_id");
     }
 
-    public function updated_by()
+    public function updated_by(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, "updated_by_id");
     }
 }

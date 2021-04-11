@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Models\Page;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -74,5 +75,20 @@ class PageTest extends TestCase
             $user2->id,
             "updated_by does not match the latest user",
         );
+    }
+
+    public function test_created_by_returns_belongsTo_relation()
+    {
+        $this->actingAs(User::factory()->create()); // Need to have a user loged in due to created_by and updated_by functionality.
+        /** @var Page $page */
+        $page = Page::factory()->create();
+
+        // See if the function returns a BelongsTo relation.
+        $this->assertInstanceOf(BelongsTo::class, $page->created_by());
+        $this->assertInstanceOf(BelongsTo::class, $page->updated_by());
+
+        // See if the property returns an object of User.
+        $this->assertInstanceOf(User::class, $page->created_by);
+        $this->assertInstanceOf(User::class, $page->updated_by);
     }
 }

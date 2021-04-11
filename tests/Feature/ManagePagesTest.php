@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Inertia\Testing\Assert;
 use Tests\TestCase;
 
-class PageTest extends TestCase
+class ManagePagesTest extends TestCase
 {
     use RefreshDatabase;
 
