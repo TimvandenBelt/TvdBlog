@@ -49,5 +49,8 @@ class CreateApiTokenTest extends TestCase
                 ->tokens->first()
                 ->can("delete"),
         );
+
+        $response = $this->get(route("api.user.current"));
+        $response->assertJson($user->toArray());
     }
 }
