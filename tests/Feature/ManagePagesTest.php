@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\Page;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Inertia\Testing\Assert;
 use Tests\TestCase;
 
@@ -14,8 +13,7 @@ class ManagePagesTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * A basic feature test example.
-     *
+     * A guest cannot create a page
      * @return void
      */
     public function test_a_guest_cannot_create_a_page()
@@ -29,7 +27,6 @@ class ManagePagesTest extends TestCase
 
     /**
      * A logged in user can create a page.
-     *
      * @return void
      */
     public function test_a_user_can_create_a_page()
@@ -50,8 +47,7 @@ class ManagePagesTest extends TestCase
     }
 
     /**
-     * A logged in user can create a page.
-     *
+     * A logged in user who creates a page is defined as the creator and updator.
      * @return void
      */
     public function test_created_page_has_logged_in_user_as_creator_and_updater()
@@ -60,7 +56,7 @@ class ManagePagesTest extends TestCase
 
         $attributes = Page::factory()->raw();
 
-        $response = $this->post("admin/pages", $attributes);
+        $response = $this->post(route("pages.create"), $attributes);
 
         /**
          * @TODO check if also shown on page
@@ -73,18 +69,18 @@ class ManagePagesTest extends TestCase
 
     /**
      * A page is viewable by a logged in user
-     *
      * @return void
      */
     public function test_a_page_is_viewable_by_logged_in_user()
     {
-        $this->withoutExceptionHandling();
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $this->actingAs(User::factory()->create());
         /** @var Page $pageModel */
         $pageModel = Page::factory()->create();
+
         $response = $this->get(route("pages.show", [$pageModel["slug"]]));
-        $pageModel["is_password_protected"] = "0";
+
+        $pageModel["is_password_protected"] = "0"; // in PHP it is false, but in js it is "0"
+
         $response
             ->assertStatus(200)
             ->assertInertia(
@@ -94,7 +90,6 @@ class ManagePagesTest extends TestCase
 
     /**
      * A public published page is viewable by a guest
-     *
      * @return void
      */
     public function test_that_page_is_viewable_by_slug()
