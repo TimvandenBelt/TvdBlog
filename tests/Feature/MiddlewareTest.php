@@ -32,15 +32,13 @@ class MiddlewareTest extends TestCase
         $middleware = new RedirectIfAuthenticated();
         $request = Request::create(route("login"), "GET");
 
-        $response = $middleware->handle($request, function () {
-            return 200;
-        });
+        $response = $middleware->handle($request, fn() => 200);
         $this->assertEquals(200, $response);
 
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $response = $middleware->handle($request, function () {});
+        $response = $middleware->handle($request, fn($request) => $request);
         $this->assertEquals(302, $response->getStatusCode());
     }
 }

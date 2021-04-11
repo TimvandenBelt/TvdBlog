@@ -27,7 +27,7 @@ class CreateApiTokenTest extends TestCase
             $this->actingAs($user = User::factory()->create());
         }
 
-        $response = $this->post("/user/api-tokens", [
+        $this->post(route("api-tokens.store"), [
             "name" => "Test Token",
             "permissions" => ["read", "update"],
         ]);

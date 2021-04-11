@@ -34,7 +34,7 @@ class ApiTokenPermissionsTest extends TestCase
             "abilities" => ["create", "read"],
         ]);
 
-        $response = $this->put("/user/api-tokens/" . $token->id, [
+        $this->put(route("api-tokens.update", $token->id), [
             "name" => $token->name,
             "permissions" => ["delete", "missing-permission"],
         ]);
