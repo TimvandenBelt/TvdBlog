@@ -1,0 +1,7 @@
+linter:
+
+  pmd_cpd:
+    language: php
+    target:
+      - app
+      - tests
