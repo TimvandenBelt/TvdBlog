@@ -42,4 +42,31 @@ class AuthenticationTest extends TestCase
 
         $this->assertGuest();
     }
+
+    public function test_user_can_authenticate_with_two_factor()
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $this->withSession(["auth.password_confirmed_at" => time()]);
+
+        $this->post("/user/two-factor-authentication");
+
+        $this->post(route("logout"));
+
+        $response = $this->post(route("login"), [
+            "email" => $user->email,
+            "password" => "password",
+        ]);
+
+        $response->assertRedirect(route("two-factor.login"));
+
+        $response = $this->post(route("two-factor.login"), [
+            "recovery_code" => $user->fresh()->recoveryCodes()[0],
+        ]);
+
+        $this->assertAuthenticated();
+        $response->assertRedirect(RouteServiceProvider::HOME);
+    }
 }
