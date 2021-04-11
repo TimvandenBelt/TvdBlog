@@ -16,10 +16,16 @@ class ProfileInformationTest extends TestCase
 
         $response = $this->put("/user/profile-information", [
             "name" => "Test Name",
-            "email" => "test@example.com",
+            "email" => $user->email,
         ]);
 
         $this->assertEquals("Test Name", $user->fresh()->name);
+
+        $response = $this->put("/user/profile-information", [
+            "name" => $user->fresh()->name,
+            "email" => "test@example.com",
+        ]);
+
         $this->assertEquals("test@example.com", $user->fresh()->email);
     }
 }
