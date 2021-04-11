@@ -33,8 +33,8 @@ class PageFactory extends Factory
             "password" => null,
             "visible_from" => null,
             "visible_until" => null,
-            "created_by" => $user,
-            "updated_by" => $user,
+            "created_by_id" => $user,
+            "updated_by_id" => $user,
         ];
     }
 }

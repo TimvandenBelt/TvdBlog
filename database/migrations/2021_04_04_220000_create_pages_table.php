@@ -25,8 +25,8 @@ class CreatePagesTable extends Migration
             $table->string("password")->nullable();
             $table->dateTime("visible_from")->nullable();
             $table->dateTime("visible_until")->nullable();
-            $table->foreignId("created_by")->constrained("users");
-            $table->foreignId("updated_by")->constrained("users");
+            $table->foreignId("created_by_id")->constrained("users");
+            $table->foreignId("updated_by_id")->constrained("users");
             $table
                 ->string("slug")
                 ->unique()

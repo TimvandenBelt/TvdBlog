@@ -34,7 +34,7 @@ Route::middleware(["auth:sanctum", "verified"])
 /**
  * Admin section
  */
-Route::middleware(["auth:sanctum"])
+Route::middleware(["auth:sanctum", "verified"])
     ->prefix("admin")
     ->group(function () {
         /**
