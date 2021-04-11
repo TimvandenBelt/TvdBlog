@@ -14,7 +14,7 @@ class BrowserSessionsTest extends TestCase
     {
         $this->actingAs(User::factory()->create());
 
-        $response = $this->delete("/user/other-browser-sessions", [
+        $response = $this->delete(route("other-browser-sessions.destroy"), [
             "password" => "password",
         ]);
 

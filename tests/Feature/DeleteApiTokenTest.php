@@ -34,7 +34,7 @@ class DeleteApiTokenTest extends TestCase
             "abilities" => ["create", "read"],
         ]);
 
-        $this->delete(route("api-tokens.destroy") . $token->id);
+        $this->delete(route("api-tokens.destroy", $token->id));
 
         $this->assertCount(0, $user->fresh()->tokens);
     }
