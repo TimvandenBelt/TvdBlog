@@ -34,7 +34,7 @@ Route::middleware(["auth:sanctum", "verified"])
 /**
  * Admin section
  */
-Route::middleware(["auth:sanctum"])
+Route::middleware(["auth:sanctum", "verified"])
     ->prefix("admin")
     ->group(function () {
         /**
@@ -50,4 +50,7 @@ Route::middleware(["auth:sanctum"])
         });
     });
 
+/**
+ * Page wildcard, must be at bottom.
+ */
 Route::get("/{page:slug}", [PageController::class, "show"])->name("pages.show");
