@@ -14,20 +14,20 @@ class PageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
-    }
+    //    public function index()
+    //    {
+    //        //
+    //    }
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+    //    public function create()
+    //    {
+    //        //
+    //    }
 
     /**
      * Store a newly created page in storage.
@@ -73,10 +73,10 @@ class PageController extends Controller
      * @param  \App\Models\Page  $page
      * @return \Illuminate\Http\Response|\Inertia\Response
      */
-    public function edit(Page $page)
-    {
-        //
-    }
+    //    public function edit(Page $page)
+    //    {
+    //        //
+    //    }
 
     /**
      * Update the specified resource in storage.
@@ -85,10 +85,10 @@ class PageController extends Controller
      * @param  \App\Models\Page  $page
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Page $page)
-    {
-        //
-    }
+    //    public function update(Request $request, Page $page)
+    //    {
+    //        //
+    //    }
 
     /**
      * Remove the specified resource from storage.
@@ -96,8 +96,8 @@ class PageController extends Controller
      * @param  \App\Models\Page  $page
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Page $page)
-    {
-        //
-    }
+    //    public function destroy(Page $page)
+    //    {
+    //        //
+    //    }
 }
