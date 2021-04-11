@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class ProfileInformationTest extends TestCase
@@ -20,6 +21,8 @@ class ProfileInformationTest extends TestCase
         ]);
 
         $this->assertEquals("Test Name", $user->fresh()->name);
+
+        Event::fake();
 
         $response = $this->put("/user/profile-information", [
             "name" => $user->fresh()->name,
