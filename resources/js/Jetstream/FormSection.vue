@@ -35,7 +35,6 @@
 import JetSectionTitle from "./SectionTitle";
 
 export default {
-
     components: {
         JetSectionTitle,
     },

@@ -47,7 +47,6 @@
 import Modal from "./Modal";
 
 export default {
-
     components: {
         Modal,
     },

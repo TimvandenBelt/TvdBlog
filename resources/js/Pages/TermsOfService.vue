@@ -19,7 +19,6 @@
 import JetAuthenticationCardLogo from "@/Jetstream/AuthenticationCardLogo";
 
 export default {
-
     components: {
         JetAuthenticationCardLogo,
     },

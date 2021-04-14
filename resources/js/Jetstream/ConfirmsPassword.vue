@@ -50,10 +50,9 @@ import JetDialogModal from "./DialogModal";
 import JetInput from "./Input";
 import JetInputError from "./InputError";
 import JetSecondaryButton from "./SecondaryButton";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-
     components: {
         JetButton,
         JetDialogModal,
