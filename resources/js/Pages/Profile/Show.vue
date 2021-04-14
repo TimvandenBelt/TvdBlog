@@ -57,7 +57,6 @@ import UpdatePasswordForm from "./UpdatePasswordForm";
 import UpdateProfileInformationForm from "./UpdateProfileInformationForm";
 
 export default {
-
     components: {
         AppLayout,
         DeleteUserForm,

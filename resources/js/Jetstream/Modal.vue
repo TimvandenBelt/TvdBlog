@@ -50,7 +50,6 @@
 import { onMounted, onUnmounted } from "vue";
 
 export default {
-
     props: {
         show: {
             default: false,

@@ -120,7 +120,7 @@ import JetButton from "@/Jetstream/Button";
 import JetConfirmsPassword from "@/Jetstream/ConfirmsPassword";
 import JetDangerButton from "@/Jetstream/DangerButton";
 import JetSecondaryButton from "@/Jetstream/SecondaryButton";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
     components: {

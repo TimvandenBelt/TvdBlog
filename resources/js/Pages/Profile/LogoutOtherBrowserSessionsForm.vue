@@ -151,7 +151,6 @@ import JetInputError from "@/Jetstream/InputError";
 import JetSecondaryButton from "@/Jetstream/SecondaryButton";
 
 export default {
-
     components: {
         JetActionMessage,
         JetActionSection,

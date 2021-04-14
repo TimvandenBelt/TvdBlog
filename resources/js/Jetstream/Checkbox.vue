@@ -9,7 +9,6 @@
 
 <script>
 export default {
-
     props: {
         checked: {
             type: [Array, Boolean],
