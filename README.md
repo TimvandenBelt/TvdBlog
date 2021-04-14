@@ -27,8 +27,10 @@ A simple CMS build on Laravel
 ## Uses:
 
 ### CI Tools:
-- Github Actions
+
+-   Github Actions
 
 ### Packages:
-- Laravel
-- Vue
+
+-   Laravel
+-   Vue
