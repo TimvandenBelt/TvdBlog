@@ -1,0 +1,10 @@
+exclude:
+  - /tests/.*
+  - /bootstrap/.*
+  - /config/.*
+  - /database/.*
+  - /docker/.*
+  - /public/.*
+  - /routes/.*
+  - /storage/.*
+  - /resources/lang/.*
