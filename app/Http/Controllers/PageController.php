@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Page;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
@@ -49,13 +50,19 @@ class PageController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified page.
      *
      * @param  \App\Models\Page  $page
-     * @return \Illuminate\Http\Response|\Inertia\Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Inertia\Response|\Response
      */
     public function show(Page $page)
     {
+        if ($page->is_draft || $page->is_private) {
+            if (!Auth::check()) {
+                return Redirect::route("login");
+            }
+        }
+
         return Inertia::render("Page/Show", [
             "page" => $page->only(
                 "title",

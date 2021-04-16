@@ -16,7 +16,7 @@ class ManagePagesTest extends TestCase
      * A guest cannot create a page
      * @return void
      */
-    public function test_a_guest_cannot_create_a_page()
+    public function test_a_guest_cannot_create_a_page(): void
     {
         $attributes = Page::factory()->raw();
 
@@ -27,9 +27,8 @@ class ManagePagesTest extends TestCase
 
     /**
      * A logged in user can create a page.
-     * @return void
      */
-    public function test_a_user_can_create_a_page()
+    public function test_a_user_can_create_a_page(): void
     {
         $this->actingAs(User::factory()->create());
 
@@ -48,9 +47,8 @@ class ManagePagesTest extends TestCase
 
     /**
      * A logged in user who creates a page is defined as the creator and updator.
-     * @return void
      */
-    public function test_created_page_has_logged_in_user_as_creator_and_updater()
+    public function test_created_page_has_logged_in_user_as_creator_and_updater(): void
     {
         $this->actingAs(User::factory()->create());
 
@@ -69,9 +67,8 @@ class ManagePagesTest extends TestCase
 
     /**
      * A page is viewable by a logged in user
-     * @return void
      */
-    public function test_a_page_is_viewable_by_logged_in_user()
+    public function test_a_page_is_viewable_by_logged_in_user(): void
     {
         $this->actingAs(User::factory()->create());
         /** @var Page $pageModel */
@@ -90,10 +87,50 @@ class ManagePagesTest extends TestCase
 
     /**
      * A public published page is viewable by a guest
-     * @return void
      */
-    public function test_that_page_is_viewable_by_slug()
+    public function test_page_permissions_for_guests()
     {
-        $this->assertEquals(1, 1);
+        $this->actingAs(User::factory()->create());
+        /** @var Page $pageModel */
+        $pageModel = Page::factory()->create();
+        $pageModelPublished = Page::factory()->create(["is_draft" => false]);
+        $pageModelPublic = Page::factory()->create(["is_private" => false]);
+        $pageModelPublicPublished = Page::factory()->create([
+            "is_draft" => false,
+            "is_private" => false,
+        ]);
+
+        \Auth::logout();
+
+        // Test if a guest can view the page by default (should not, because it is a draft & private by default)
+        $response = $this->get(route("pages.show", [$pageModel->slug]));
+        $response->assertRedirect(route("login"));
+
+        // Test if a guest can view a published page (should not, because it is private default)
+        $response = $this->get(
+            route("pages.show", [$pageModelPublished->slug]),
+        );
+        $response->assertRedirect(route("login"));
+
+        // Test if a guest can view a public page (should not, because it is draft default)
+        $response = $this->get(route("pages.show", [$pageModelPublic->slug]));
+        $response->assertRedirect(route("login"));
+
+        // Test if a guest can view a public & published page (should not, because it is draft default)
+        $response = $this->get(
+            route("pages.show", [$pageModelPublicPublished->slug]),
+        );
+        $pageModelPublicPublished["is_password_protected"] = "0"; // in PHP it is false, but in js it is "0"
+        $pageModelPublicPublished["is_draft"] = "0"; // in PHP it is false, but in js it is "0"
+        $pageModelPublicPublished["is_private"] = "0"; // in PHP it is false, but in js it is "0"
+
+        $response
+            ->assertStatus(200)
+            ->assertInertia(
+                fn(Assert $page) => $page->where(
+                    "page",
+                    $pageModelPublicPublished,
+                ),
+            );
     }
 }
