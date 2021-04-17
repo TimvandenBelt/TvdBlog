@@ -23,8 +23,8 @@ class UserTest extends TestCase
 
         Page::factory()
             ->count(3)
-            ->for($user, "created_by")
-            ->for($user, "updated_by")
+            ->for($user, "createdBy")
+            ->for($user, "updatedBy")
             ->create();
 
         // See if the function returns a BelongsTo relation.
