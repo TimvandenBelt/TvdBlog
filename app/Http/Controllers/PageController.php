@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use function Symfony\Component\String\s;
 
 class PageController extends Controller
 {
@@ -35,15 +36,7 @@ class PageController extends Controller
      */
     public function store(Request $request): \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
     {
-        $attributes = $request->validate([
-            "title" => ["required"],
-            "content" => ["required"],
-            "slug" => ["required", "unique:pages"],
-            "is_draft" => ["nullable","boolean"],
-            "is_private" => ["nullable", "boolean"],
-            "visible_from" => ["nullable", "date"],
-            "visible_until" => ["nullable", "date"],
-        ]);
+        $attributes = $this->validateRequest($request);
 
         Page::create($attributes);
 
@@ -88,11 +81,7 @@ class PageController extends Controller
      */
         public function update(Request $request, Page $page): \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
         {
-            $attributes = $request->validate([
-                "title" => "required",
-                "content" => "required",
-                "slug" => "required",
-            ]);
+            $attributes = $this->validateRequest($request);
 
             $page->update($attributes);
 
@@ -109,4 +98,16 @@ class PageController extends Controller
     //    {
     //        //
     //    }
+
+    private function validateRequest(Request $request): array {
+        return $request->validate([
+            "title" => ["required"],
+            "content" => ["required"],
+            "slug" => ["required", "unique:pages"],
+            "is_draft" => ["sometimes", "nullable", "boolean"],
+            "is_private" => ["sometimes", "nullable", "boolean"],
+            "visible_from" => ["sometimes", "nullable","date","before:visible_until"],
+            "visible_until" => ["sometimes", "nullable","date", "after:visible_from"],
+        ]);
+    }
 }

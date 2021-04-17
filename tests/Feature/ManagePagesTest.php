@@ -193,8 +193,27 @@ class ManagePagesTest extends TestCase
         $response->assertSessionHasErrors(["slug"]);
 
         // Dates do work
-        $attributes = Page::factory()->raw(["slug" => null]);
-        $response = $this->post(route("pages.store"));
-        $response->assertSessionHasErrors(["slug"]);
+        $attributes = Page::factory()
+            ->withFrom()
+            ->withUntil()
+            ->raw();
+        $response = $this->post(route("pages.store"), $attributes);
+        $response->assertSessionHasNoErrors();
+
+        // Date from must be earlier than until
+        $attributes = Page::factory()
+            ->withFrom(now()->addDay())
+            ->withUntil(now()->subDay())
+            ->raw();
+        $response = $this->post(route("pages.store"), $attributes);
+        $response->assertSessionHasErrors(["visible_from", "visible_until"]);
+
+        // Dates should be dates
+        $attributes = Page::factory()->raw([
+            "visible_until" => "test",
+            "visible_from" => "test",
+        ]);
+        $response = $this->post(route("pages.store"), $attributes);
+        $response->assertSessionHasErrors(["visible_from", "visible_until"]);
     }
 }

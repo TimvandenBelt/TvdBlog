@@ -43,10 +43,17 @@ class PageFactory extends Factory
         ]);
     }
 
-    public function from(Carbon $date = null): PageFactory
+    public function withFrom(Carbon $date = null): PageFactory
     {
         return $this->state([
-            'visibile_from' => $date ?? $this->faker->dateTime,
+            'visible_from' => $date ?? $this->faker->dateTimeBetween('-1 year'),
+        ]);
+    }
+
+    public function withUntil(Carbon $date = null): PageFactory
+    {
+        return $this->state([
+            'visible_until' => $date ?? $this->faker->dateTimeBetween('now', '1 year'),
         ]);
     }
 }
