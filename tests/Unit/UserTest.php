@@ -47,13 +47,13 @@ class UserTest extends TestCase
         // See if the property returns an object of Page.
         $this->assertInstanceOf(
             Page::class,
-            $user->updated_pages->first(),
+            $user->updatedPages->first(),
             "updated_by is not an instance of Page",
         );
         // See if the property returns an object of Page.
         $this->assertInstanceOf(
             Page::class,
-            $user->created_pages->first(),
+            $user->createdPages->first(),
             "created_by is not an instance of Page",
         );
         // See if the property returns an object of Page.
