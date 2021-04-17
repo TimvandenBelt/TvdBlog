@@ -82,12 +82,12 @@ class PageTest extends TestCase
         // See if the function returns a BelongsTo relation.
         $this->assertInstanceOf(
             BelongsTo::class,
-            $page->created_by(),
+            $page->createdBy(),
             "created_by does not return a BelongsTo relation",
         );
         $this->assertInstanceOf(
             BelongsTo::class,
-            $page->updated_by(),
+            $page->updatedBy(),
             "updated_by does not return a BelongsTo relation",
         );
 

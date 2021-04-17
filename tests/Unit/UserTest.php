@@ -30,12 +30,12 @@ class UserTest extends TestCase
         // See if the function returns a BelongsTo relation.
         $this->assertInstanceOf(
             HasMany::class,
-            $user->updated_pages(),
+            $user->updatedPages(),
             "updated_by does not return a BelongsTo relation",
         );
         $this->assertInstanceOf(
             HasMany::class,
-            $user->created_pages(),
+            $user->createdPages(),
             "updated_by does not return a BelongsTo relation",
         );
         $this->assertInstanceOf(

@@ -59,18 +59,18 @@ class Page extends Model
     protected static function booted(): void
     {
         static::creating(function (Page $page) {
-            $page->autoset_updated_by();
-            $page->autoset_created_by();
+            $page->autosetUpdatedBy();
+            $page->autosetCreatedBy();
         });
         static::updating(function (Page $page) {
-            $page->autoset_updated_by();
+            $page->autosetUpdatedBy();
         });
     }
 
     /**
      * Will autoset the updated_by to logged in user.
      */
-    private function autoset_updated_by(): void
+    private function autosetUpdatedBy(): void
     {
         $this->updated_by_id = auth()->id();
     }
@@ -78,7 +78,7 @@ class Page extends Model
     /**
      * Will autoset the created_by to logged in user.
      */
-    private function autoset_created_by(): void
+    private function autosetCreatedBy(): void
     {
         $this->created_by_id = auth()->id();
     }
@@ -86,7 +86,7 @@ class Page extends Model
     /**
      * The relation with a user who created the page.
      */
-    public function created_by(): BelongsTo
+    public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, "created_by_id");
     }
@@ -94,7 +94,7 @@ class Page extends Model
     /**
      * The relation with a user who updated the page last.
      */
-    public function updated_by(): BelongsTo
+    public function updatedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, "updated_by_id");
     }
