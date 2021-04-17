@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Page;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\Assert;
 use Tests\TestCase;
@@ -20,9 +21,9 @@ class ManagePagesTest extends TestCase
     {
         $attributes = Page::factory()->raw();
 
-        $response = $this->post("admin/pages", $attributes);
+        $response = $this->post(route("pages.store"), $attributes);
 
-        $response->assertRedirect("login");
+        $response->assertRedirect(route("login"));
     }
 
     /**
@@ -34,7 +35,7 @@ class ManagePagesTest extends TestCase
 
         $attributes = Page::factory()->raw();
 
-        $response = $this->post("admin/pages", $attributes);
+        $response = $this->post(route("pages.store"), $attributes);
 
         /**
          * @TODO check if also shown on page
@@ -46,6 +47,38 @@ class ManagePagesTest extends TestCase
     }
 
     /**
+     * Only a logged in user can update a page. Guest should be redirected to login.
+     */
+    public function test_only_a_logged_in_user_can_update_page()
+    {
+        $this->actingAs(User::factory()->create());
+        $pageModel = Page::factory()->create();
+
+        /** @var Page $newAttributes */
+        $newAttributes = Page::factory()
+            ->withoutUser()
+            ->make(["created_at" => $pageModel->created_at]);
+
+        $response = $this->patch(
+            route("pages.update", $pageModel->id),
+            $newAttributes->getAttributes(),
+        );
+        $response->assertRedirect(route("pages.edit", $pageModel->id));
+
+        $response = $this->get(route("pages.show", [$newAttributes->slug]));
+        $newAttributes->is_password_protected = "0"; // in PHP it is false, but in DB it is "0"
+        $newAttributes->updated_at = $pageModel->fresh()->updated_at;
+        $response
+            ->assertStatus(200)
+            ->assertInertia(
+                fn(Assert $page) => $page->where(
+                    "page",
+                    $newAttributes->toArray(),
+                ),
+            );
+    }
+
+    /**
      * A logged in user who creates a page is defined as the creator and updator.
      */
     public function test_created_page_has_logged_in_user_as_creator_and_updater(): void
@@ -54,7 +87,7 @@ class ManagePagesTest extends TestCase
 
         $attributes = Page::factory()->raw();
 
-        $response = $this->post(route("pages.create"), $attributes);
+        $response = $this->post(route("pages.store"), $attributes);
 
         /**
          * @TODO check if also shown on page
@@ -76,7 +109,7 @@ class ManagePagesTest extends TestCase
 
         $response = $this->get(route("pages.show", [$pageModel["slug"]]));
 
-        $pageModel["is_password_protected"] = "0"; // in PHP it is false, but in js it is "0"
+        $pageModel["is_password_protected"] = "0"; // in PHP it is false, but in DB it is "0"
 
         $response
             ->assertStatus(200)
@@ -132,5 +165,36 @@ class ManagePagesTest extends TestCase
                     $pageModelPublicPublished,
                 ),
             );
+    }
+
+    public function test_validation_rules_for_pages()
+    {
+        $this->actingAs(User::factory()->create());
+
+        // A title is required
+        $attributes = Page::factory()->raw(["title" => null]);
+        $response = $this->post(route("pages.store"), $attributes);
+        $response->assertSessionHasErrors(["title"]);
+
+        // Content is required
+        $attributes = Page::factory()->raw(["content" => null]);
+        $response = $this->post(route("pages.store"), $attributes);
+        $response->assertSessionHasErrors(["content"]);
+
+        // Slug is required
+        $attributes = Page::factory()->raw(["slug" => null]);
+        $response = $this->post(route("pages.store"), $attributes);
+        $response->assertSessionHasErrors(["slug"]);
+
+        // Slug must be unique
+        $attributes = Page::factory()->raw();
+        $this->post(route("pages.store"), $attributes);
+        $response = $this->post(route("pages.store"), $attributes);
+        $response->assertSessionHasErrors(["slug"]);
+
+        // Dates do work
+        $attributes = Page::factory()->raw(["slug" => null]);
+        $response = $this->post(route("pages.store"));
+        $response->assertSessionHasErrors(["slug"]);
     }
 }

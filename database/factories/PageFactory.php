@@ -4,23 +4,20 @@ namespace Database\Factories;
 
 use App\Models\Page;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PageFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
-     *
-     * @var string
      */
     protected $model = Page::class;
 
     /**
      * Define the model's default state.
-     *
-     * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         $user = User::factory();
         return [
@@ -36,5 +33,20 @@ class PageFactory extends Factory
             "created_by_id" => $user,
             "updated_by_id" => $user,
         ];
+    }
+
+    public function withoutUser(): PageFactory
+    {
+        return $this->state([
+            'created_by_id' => null,
+            'updated_by_id' => null,
+        ]);
+    }
+
+    public function from(Carbon $date = null): PageFactory
+    {
+        return $this->state([
+            'visibile_from' => $date ?? $this->faker->dateTime,
+        ]);
     }
 }

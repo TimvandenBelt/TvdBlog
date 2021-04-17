@@ -32,16 +32,17 @@ class PageController extends Controller
 
     /**
      * Store a newly created page in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
     {
         $attributes = $request->validate([
-            "title" => "required",
-            "content" => "required",
-            "slug" => "required",
+            "title" => ["required"],
+            "content" => ["required"],
+            "slug" => ["required", "unique:pages"],
+            "is_draft" => ["nullable","boolean"],
+            "is_private" => ["nullable", "boolean"],
+            "visible_from" => ["nullable", "date"],
+            "visible_until" => ["nullable", "date"],
         ]);
 
         Page::create($attributes);
@@ -51,11 +52,8 @@ class PageController extends Controller
 
     /**
      * Display the specified page.
-     *
-     * @param  \App\Models\Page  $page
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Inertia\Response|\Response
      */
-    public function show(Page $page)
+    public function show(Page $page): \Response|\Illuminate\Http\Response|\Inertia\Response|\Illuminate\Http\RedirectResponse
     {
         if ($page->is_draft || $page->is_private) {
             if (!Auth::check()) {
@@ -80,22 +78,26 @@ class PageController extends Controller
      * @param  \App\Models\Page  $page
      * @return \Illuminate\Http\Response|\Inertia\Response
      */
-    //    public function edit(Page $page)
-    //    {
-    //        //
-    //    }
+        public function edit(Page $page)
+        {
+            //
+        }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Page  $page
-     * @return \Illuminate\Http\Response
      */
-    //    public function update(Request $request, Page $page)
-    //    {
-    //        //
-    //    }
+        public function update(Request $request, Page $page): \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+        {
+            $attributes = $request->validate([
+                "title" => "required",
+                "content" => "required",
+                "slug" => "required",
+            ]);
+
+            $page->update($attributes);
+
+            return Redirect::route('pages.edit', $page->id);
+        }
 
     /**
      * Remove the specified resource from storage.
