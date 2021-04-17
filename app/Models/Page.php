@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -17,8 +18,6 @@ class Page extends Model
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var array
      */
     protected $fillable = [
         "title",
@@ -36,8 +35,6 @@ class Page extends Model
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
@@ -59,21 +56,21 @@ class Page extends Model
      * On creation, autoset updated and created by.
      * On update, autoset updated by.
      */
-    protected static function booted()
+    protected static function booted(): void
     {
         static::creating(function (Page $page) {
-            $page->autoset_updated_by();
-            $page->autoset_created_by();
+            $page->autosetUpdatedBy();
+            $page->autosetCreatedBy();
         });
         static::updating(function (Page $page) {
-            $page->autoset_updated_by();
+            $page->autosetUpdatedBy();
         });
     }
 
     /**
      * Will autoset the updated_by to logged in user.
      */
-    private function autoset_updated_by()
+    private function autosetUpdatedBy(): void
     {
         $this->updated_by_id = auth()->id();
     }
@@ -81,25 +78,23 @@ class Page extends Model
     /**
      * Will autoset the created_by to logged in user.
      */
-    private function autoset_created_by()
+    private function autosetCreatedBy(): void
     {
         $this->created_by_id = auth()->id();
     }
 
     /**
      * The relation with a user who created the page.
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function created_by(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, "created_by_id");
     }
 
     /**
      * The relation with a user who updated the page last.
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function updated_by(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function updatedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, "updated_by_id");
     }

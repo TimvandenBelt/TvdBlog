@@ -32,21 +32,31 @@ Route::middleware(["auth:sanctum", "verified"])
     ->name("dashboard");
 
 /**
- * Admin section
+ * Admin section =======================
  */
 Route::middleware(["auth:sanctum", "verified"])
     ->prefix("admin")
     ->group(function () {
         /**
-         * Pages section
+         * START Pages section
          */
         Route::prefix("pages")->group(function () {
             Route::post("/", [PageController::class, "store"])->name(
-                "pages.create",
+                "pages.store",
             );
             Route::get("/", [PageController::class, "index"])->name(
                 "pages.index",
             );
+            Route::patch("/{page}", [PageController::class, "update"])->name(
+                "pages.update",
+            );
+
+            Route::get("/{page}", [PageController::class, "edit"])->name(
+                "pages.edit",
+            );
+            /**
+             * END pages sections
+             */
         });
     });
 
