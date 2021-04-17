@@ -54,7 +54,7 @@ class PageTest extends TestCase
             "updated_by_id" => null,
         ])->create();
         $this->assertEquals(
-            $page->created_by->id,
+            $page->createdBy->id,
             $user1->id,
             "created_by is not equal to the user who created the page",
         );
@@ -63,7 +63,7 @@ class PageTest extends TestCase
         $this->actingAs($user2);
         $page->update(Page::factory()->raw());
         $this->assertEquals(
-            $page->updated_by->id,
+            $page->updatedBy->id,
             $user2->id,
             "updated_by does not match the latest user",
         );
@@ -82,24 +82,24 @@ class PageTest extends TestCase
         // See if the function returns a BelongsTo relation.
         $this->assertInstanceOf(
             BelongsTo::class,
-            $page->created_by(),
+            $page->createdBy(),
             "created_by does not return a BelongsTo relation",
         );
         $this->assertInstanceOf(
             BelongsTo::class,
-            $page->updated_by(),
+            $page->updatedBy(),
             "updated_by does not return a BelongsTo relation",
         );
 
         // See if the property returns an object of User.
         $this->assertInstanceOf(
             User::class,
-            $page->created_by,
+            $page->createdBy,
             "created_by is not an instance of User",
         );
         $this->assertInstanceOf(
             User::class,
-            $page->updated_by,
+            $page->updatedBy,
             "updated_by is not an instance of User",
         );
     }

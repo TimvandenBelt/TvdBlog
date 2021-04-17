@@ -23,19 +23,19 @@ class UserTest extends TestCase
 
         Page::factory()
             ->count(3)
-            ->for($user, "created_by")
-            ->for($user, "updated_by")
+            ->for($user, "createdBy")
+            ->for($user, "updatedBy")
             ->create();
 
         // See if the function returns a BelongsTo relation.
         $this->assertInstanceOf(
             HasMany::class,
-            $user->updated_pages(),
+            $user->updatedPages(),
             "updated_by does not return a BelongsTo relation",
         );
         $this->assertInstanceOf(
             HasMany::class,
-            $user->created_pages(),
+            $user->createdPages(),
             "updated_by does not return a BelongsTo relation",
         );
         $this->assertInstanceOf(
@@ -47,13 +47,13 @@ class UserTest extends TestCase
         // See if the property returns an object of Page.
         $this->assertInstanceOf(
             Page::class,
-            $user->updated_pages->first(),
+            $user->updatedPages->first(),
             "updated_by is not an instance of Page",
         );
         // See if the property returns an object of Page.
         $this->assertInstanceOf(
             Page::class,
-            $user->created_pages->first(),
+            $user->createdPages->first(),
             "created_by is not an instance of Page",
         );
         // See if the property returns an object of Page.
