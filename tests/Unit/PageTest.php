@@ -46,7 +46,7 @@ class PageTest extends TestCase
         $user1 = User::factory()->create(); // The user who will create the page.
         $user2 = User::factory()->create(); // The user who will updated the page.
 
-        // Test creating the page
+        // Test creating the page.
         $this->actingAs($user1);
         /** @var Page $page */
         $page = Page::factory([

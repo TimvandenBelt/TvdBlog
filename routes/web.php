@@ -63,4 +63,10 @@ Route::middleware(["auth:sanctum", "verified"])
 /**
  * Page wildcard, must be at bottom.
  */
+Route::get("/{page:slug}/password", [PageController::class, "guarded"])->name(
+    "pages.guarded",
+);
+Route::post("/{page:slug}/password", [PageController::class, "enter"])->name(
+    "pages.enter",
+);
 Route::get("/{page:slug}", [PageController::class, "show"])->name("pages.show");

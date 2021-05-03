@@ -6,10 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Hash;
 
 /**
- * Class Page
- * @package App\Models
  * Represents a page on the website.
  */
 class Page extends Model
@@ -41,15 +40,9 @@ class Page extends Model
     /**
      * The attributes that are hidden.
      */
-    protected $visible = [
-        "title",
-        "content",
-        "is_password_protected",
-        "updated_at",
-        "created_at",
-        "created_by",
-        "updated_by",
-    ];
+    protected $visible = ["title", "content", "updated_at", "created_at"];
+
+    protected $hidden = ["password"];
 
     /**
      * Run these when the model is booted.
@@ -69,6 +62,7 @@ class Page extends Model
 
     /**
      * Will autoset the updated_by to logged in user.
+     * @TODO check if auth or throw exception
      */
     private function autosetUpdatedBy(): void
     {
@@ -77,6 +71,7 @@ class Page extends Model
 
     /**
      * Will autoset the created_by to logged in user.
+     * @TODO check if auth or throw exception
      */
     private function autosetCreatedBy(): void
     {
@@ -97,5 +92,31 @@ class Page extends Model
     public function updatedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, "updated_by_id");
+    }
+
+    /**
+     * When setting a password, hash it.
+     */
+    public function setPasswordAttribute(?string $password = null): void
+    {
+        $this->attributes["password"] = $password
+            ? Hash::make($password)
+            : null;
+    }
+
+    /*
+     * Checks in the session if visitor is allowed to access the page.
+     */
+    public function visitorHasPasswordAccessToPasswordProtected(): bool
+    {
+        return session()->has("page-access-id-{$this->id}");
+    }
+
+    /*
+     * Authorize the visitor to access the page.
+     */
+    public function authorizeVisitorForPasswordProtected(): void
+    {
+        session()->put("page-access-id-{$this->id}", true);
     }
 }

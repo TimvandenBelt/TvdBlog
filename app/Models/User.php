@@ -55,7 +55,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Lay down relation that a user can have multiple pages which the created.
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function createdPages(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
@@ -64,7 +63,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Lay down relation that a user can have multiple pages which the user updated.
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function updatedPages(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
@@ -73,7 +71,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Lay down relation that returns all related Pages, created and updated.
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function pages(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

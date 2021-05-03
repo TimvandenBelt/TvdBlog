@@ -43,17 +43,33 @@ class PageFactory extends Factory
         ]);
     }
 
-    public function withFrom(Carbon $date = null): PageFactory
+    public function withFrom(?Carbon $date = null): PageFactory
     {
         return $this->state([
             'visible_from' => $date ?? $this->faker->dateTimeBetween('-1 year'),
         ]);
     }
 
-    public function withUntil(Carbon $date = null): PageFactory
+    public function withUntil(?Carbon $date = null): PageFactory
     {
         return $this->state([
             'visible_until' => $date ?? $this->faker->dateTimeBetween('now', '1 year'),
+        ]);
+    }
+
+    public function withPassword(?string $password = null): PageFactory
+    {
+        return $this->state([
+            'is_password_protected' => true,
+            'password' => $password ?? $this->faker->password,
+        ]);
+    }
+
+    public function guestable(): PageFactory
+    {
+        return $this->state([
+            "is_draft" => false,
+            "is_private" => false,
         ]);
     }
 }

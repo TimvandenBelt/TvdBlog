@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Page;
+use Hash;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class PageController extends Controller
@@ -47,17 +50,18 @@ class PageController extends Controller
      */
     public function show(Page $page)
     {
-        if ($page->is_draft || $page->is_private) {
-            if (!Auth::check()) {
-                return Redirect::route("login");
-            }
+        // Verify if visitor is allowed to view the page due to draft or private status.
+        Gate::authorize("view", $page);
+
+        // Check if visitor is allowed to view the page if password protected.
+        if (Gate::denies("view_password_protected", $page)) {
+            return Redirect::route("pages.guarded", $page->slug);
         }
 
         return Inertia::render("Page/Show", [
             "page" => $page->only(
                 "title",
                 "content",
-                "is_password_protected",
                 "updated_at",
                 "created_at",
             ),
@@ -70,10 +74,12 @@ class PageController extends Controller
      * @param  \App\Models\Page  $page
      * @return \Illuminate\Http\Response|\Inertia\Response
      */
-    //        public function edit(Page $page)
-    //        {
-    //            //
-    //        }
+    public function edit(Page $page)
+    {
+        return Inertia::render("Page/Edit", [
+            "page" => $page,
+        ]);
+    }
 
     /**
      * Update the specified resource in storage.
@@ -98,12 +104,15 @@ class PageController extends Controller
     //        //
     //    }
 
+    /*
+     * Validation for creating or updating a page.
+     */
     private function validateRequest(Request $request): array
     {
         return $request->validate([
-            "title" => ["required"],
-            "content" => ["required"],
-            "slug" => ["required", "unique:pages"],
+            "title" => ["required", "string"],
+            "content" => ["required", "string"],
+            "slug" => ["required", "unique:pages", "string"],
             "is_draft" => ["sometimes", "nullable", "boolean"],
             "is_private" => ["sometimes", "nullable", "boolean"],
             "visible_from" => [
@@ -118,6 +127,55 @@ class PageController extends Controller
                 "date",
                 "after:visible_from",
             ],
+            "is_password_protected" => ["sometimes", "nullable", "boolean"],
+            "password" => [
+                "nullable",
+                "min:3",
+                Rule::requiredIf(
+                    $request->input("is_password_protected") === true,
+                ),
+            ],
         ]);
+    }
+
+    /**
+     * Page is guarded by a password and visitor needs to login.
+     * GET
+     */
+    public function guarded(Page $page)
+    {
+        if (Gate::allows("view_password_protected", $page)) {
+            return Redirect::route("pages.show", $page->slug);
+        }
+
+        return Inertia::render("Page/Guarded", [
+            "page" => $page->only("title", "updated_at", "created_at"),
+        ]);
+    }
+
+    /**
+     * Visitor tries to access a page by submitting the password.
+     * POST
+     * @throws ValidationException
+     */
+    public function enter(Request $request, Page $page)
+    {
+        $attributes = $request->validate(["password" => ["required"]]);
+        $password = $attributes["password"];
+
+        // Wrong password
+        if (!Hash::check($password, $page->password)) {
+            throw ValidationException::withMessages([
+                "password" => "Wrong password!",
+            ]); // @TODO localize
+        }
+
+        // Correct password
+        $page->authorizeVisitorForPasswordProtected();
+
+        session()->flash("flash-message", "Successfuly accessed the page!"); // @TODO localize & move to page model
+        session()->flash("flash-type", "success");
+
+        return Redirect::route("pages.show", $page->slug);
     }
 }

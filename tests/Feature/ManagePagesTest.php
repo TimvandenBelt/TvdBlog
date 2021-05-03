@@ -4,8 +4,8 @@ namespace Tests\Feature;
 
 use App\Models\Page;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Testing\Assert;
 use Tests\TestCase;
 
@@ -14,8 +14,7 @@ class ManagePagesTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * A guest cannot create a page
-     * @return void
+     * A guest cannot create a page.
      */
     public function test_a_guest_cannot_create_a_page(): void
     {
@@ -40,7 +39,7 @@ class ManagePagesTest extends TestCase
         /**
          * @TODO check if also shown on page
          * $this->assertDatabaseHas("pages", $attributes);
-         * And check through singular get and index get
+         * And check through singular get and index get.
          */
 
         $response->assertRedirect(route("pages.index"));
@@ -66,7 +65,6 @@ class ManagePagesTest extends TestCase
         $response->assertRedirect(route("pages.edit", $pageModel->id));
 
         $response = $this->get(route("pages.show", [$newAttributes->slug]));
-        $newAttributes->is_password_protected = "0"; // in PHP it is false, but in DB it is "0"
         $newAttributes->updated_at = $pageModel->fresh()->updated_at;
         $response
             ->assertStatus(200)
@@ -79,7 +77,7 @@ class ManagePagesTest extends TestCase
     }
 
     /**
-     * A logged in user who creates a page is defined as the creator and updator.
+     * A logged in user who creates a page is defined as the creator and updater.
      */
     public function test_created_page_has_logged_in_user_as_creator_and_updater(): void
     {
@@ -92,14 +90,14 @@ class ManagePagesTest extends TestCase
         /**
          * @TODO check if also shown on page
          * $this->assertDatabaseHas("pages", $attributes);
-         * And check through singular get and index get
+         * And check through singular get and index get.
          */
 
         $response->assertRedirect(route("pages.index"));
     }
 
     /**
-     * A page is viewable by a logged in user
+     * A page is viewable by a logged in user.
      */
     public function test_a_page_is_viewable_by_logged_in_user(): void
     {
@@ -108,8 +106,6 @@ class ManagePagesTest extends TestCase
         $pageModel = Page::factory()->create();
 
         $response = $this->get(route("pages.show", [$pageModel["slug"]]));
-
-        $pageModel["is_password_protected"] = "0"; // in PHP it is false, but in DB it is "0"
 
         $response
             ->assertStatus(200)
@@ -133,23 +129,24 @@ class ManagePagesTest extends TestCase
             "is_private" => false,
         ]);
 
-        \Auth::logout();
+        Auth::logout();
+        $this->assertGuest();
 
-        // Test if a guest can view the page by default (should not, because it is a draft & private by default)
+        // Test if a guest can view the page by default (should not, because it is a draft & private by default).
         $response = $this->get(route("pages.show", [$pageModel->slug]));
-        $response->assertRedirect(route("login"));
+        $response->assertStatus(404);
 
-        // Test if a guest can view a published page (should not, because it is private default)
+        // Test if a guest can view a published page (should not, because it is private default).
         $response = $this->get(
             route("pages.show", [$pageModelPublished->slug]),
         );
-        $response->assertRedirect(route("login"));
+        $response->assertStatus(404);
 
-        // Test if a guest can view a public page (should not, because it is draft default)
+        // Test if a guest can view a public page (should not, because it is draft default).
         $response = $this->get(route("pages.show", [$pageModelPublic->slug]));
-        $response->assertRedirect(route("login"));
+        $response->assertStatus(404);
 
-        // Test if a guest can view a public & published page (should not, because it is draft default)
+        // Test if a guest can view a public & published page (should not, because it is draft default).
         $response = $this->get(
             route("pages.show", [$pageModelPublicPublished->slug]),
         );
@@ -171,28 +168,28 @@ class ManagePagesTest extends TestCase
     {
         $this->actingAs(User::factory()->create());
 
-        // A title is required
+        // A title is required.
         $attributes = Page::factory()->raw(["title" => null]);
         $response = $this->post(route("pages.store"), $attributes);
         $response->assertSessionHasErrors(["title"]);
 
-        // Content is required
+        // Content is required.
         $attributes = Page::factory()->raw(["content" => null]);
         $response = $this->post(route("pages.store"), $attributes);
         $response->assertSessionHasErrors(["content"]);
 
-        // Slug is required
+        // Slug is required.
         $attributes = Page::factory()->raw(["slug" => null]);
         $response = $this->post(route("pages.store"), $attributes);
         $response->assertSessionHasErrors(["slug"]);
 
-        // Slug must be unique
+        // Slug must be unique.
         $attributes = Page::factory()->raw();
         $this->post(route("pages.store"), $attributes);
         $response = $this->post(route("pages.store"), $attributes);
         $response->assertSessionHasErrors(["slug"]);
 
-        // Dates do work
+        // Dates do work.
         $attributes = Page::factory()
             ->withFrom()
             ->withUntil()
@@ -200,7 +197,7 @@ class ManagePagesTest extends TestCase
         $response = $this->post(route("pages.store"), $attributes);
         $response->assertSessionHasNoErrors();
 
-        // Date from must be earlier than until
+        // Date from must be earlier than until.
         $attributes = Page::factory()
             ->withFrom(now()->addDay())
             ->withUntil(now()->subDay())
@@ -208,12 +205,102 @@ class ManagePagesTest extends TestCase
         $response = $this->post(route("pages.store"), $attributes);
         $response->assertSessionHasErrors(["visible_from", "visible_until"]);
 
-        // Dates should be dates
+        // Dates should be dates.
         $attributes = Page::factory()->raw([
             "visible_until" => "test",
             "visible_from" => "test",
         ]);
         $response = $this->post(route("pages.store"), $attributes);
         $response->assertSessionHasErrors(["visible_from", "visible_until"]);
+    }
+
+    /**
+     * A page redirects to password page if password is required.
+     * A password page redirects to the page if already have access or correct password.
+     * Only accept correct passwords.
+     **/
+    public function test_password_protected_pages_for_user()
+    {
+        $this->actingAs(User::factory()->create());
+
+        // Create a page with password protection, without setting a password.
+        /** @var Page $page */
+        $page = Page::factory()
+            ->withPassword()
+            ->make();
+        $page->password = null;
+
+        $response = $this->post(
+            route("pages.store"),
+            $page->makeVisible("password")->getAttributes(),
+        );
+        $response->assertSessionHasErrors(["password"]);
+
+        // Can create a page with password.
+        /** @var Page $page */
+        $page = Page::factory()
+            ->withPassword("fail")
+            ->make();
+        $this->post(
+            route("pages.store"),
+            $page->makeVisible("password")->getAttributes(),
+        );
+        // @TODO check if page is created
+
+        // As logged in user, should be able to access the page.
+        $response = $this->get(route("pages.show", [$page]));
+        $response->assertStatus(200)->assertInertia(
+            fn(Assert $respondsPage) => $respondsPage->where(
+                "page",
+                Page::where("slug", $page->slug)
+                    ->first()
+                    ->toArray(),
+            ),
+        );
+    }
+
+    /*
+     * Test if password protected pages work properly for guests.
+     */
+    public function test_password_protected_for_guests()
+    {
+        $password = "guest-password";
+        $this->actingAs(User::factory()->create());
+        /** @var Page $page */
+        $page = Page::factory()
+            ->withPassword($password)
+            ->guestable()
+            ->create();
+
+        Auth::logout();
+        $this->assertGuest();
+
+        $response = $this->get(route("pages.show", [$page]));
+        $response->assertRedirect(route("pages.guarded", $page));
+
+        // Try to enter with a wrong password.
+        $response = $this->post(route("pages.enter", [$page]), [
+            "password" => "wrong password",
+        ]);
+        $response->assertSessionHasErrors(["password"]);
+        $this->withoutExceptionHandling();
+
+        // Try to enter with a a correct password.
+        $response = $this->post(route("pages.enter", [$page]), [
+            "password" => $password,
+        ]);
+        $response->assertRedirect(route("pages.show", $page));
+        $response->assertSessionHas(["flash-message", "flash-type"]);
+
+        // Access it after using a correct password.
+        $response = $this->get(route("pages.show", [$page]));
+        $response
+            ->assertStatus(200)
+            ->assertInertia(
+                fn(Assert $respondsPage) => $respondsPage->where(
+                    "page",
+                    $page->toArray(),
+                ),
+            );
     }
 }
